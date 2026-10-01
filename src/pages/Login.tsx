@@ -134,6 +134,7 @@ function translateAuthError(msg: string): string {
   if (m.includes('email not confirmed')) return 'Confirma o teu email antes de entrar.'
   if (m.includes('already registered')) return 'Já existe uma conta com este email.'
   if (m.includes('password should be')) return 'A palavra-passe deve ter pelo menos 8 caracteres.'
+  if (m.includes('is invalid')) return 'Email inválido.'
   if (m.includes('rate limit')) return 'Demasiadas tentativas. Tenta novamente daqui a pouco.'
   return msg
 }

@@ -1,12 +1,17 @@
 import type { LogWithActor, MeetingStatus, NameRef, Role } from './types'
 
 const dateTime = new Intl.DateTimeFormat('pt-PT', { dateStyle: 'medium', timeStyle: 'short' })
-const dateOnly = new Intl.DateTimeFormat('pt-PT', { weekday: 'short', day: 'numeric', month: 'short' })
+const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
+const weekday = new Intl.DateTimeFormat('pt-PT', { weekday: 'short' })
 const timeOnly = new Intl.DateTimeFormat('pt-PT', { timeStyle: 'short' })
 const relative = new Intl.RelativeTimeFormat('pt-PT', { numeric: 'auto' })
 
 export const fmtDateTime = (iso: string) => dateTime.format(new Date(iso))
-export const fmtDate = (iso: string) => dateOnly.format(new Date(iso))
+/** "qui 1 out" — compact date for lists. */
+export function fmtDate(iso: string): string {
+  const d = new Date(iso)
+  return `${weekday.format(d).replace('-feira', '').slice(0, 3)} ${d.getDate()} ${MONTHS[d.getMonth()]}`
+}
 export const fmtTime = (iso: string) => timeOnly.format(new Date(iso))
 
 export function fmtRelative(iso: string): string {
@@ -85,7 +90,7 @@ export function describeLog(entry: LogWithActor): string {
     case 'note_deleted':
       return 'removeu notas'
     case 'manual':
-      return str('text')
+      return `registou: “${str('text')}”`
     default:
       return entry.event
   }
